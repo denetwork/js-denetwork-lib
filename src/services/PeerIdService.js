@@ -66,10 +66,30 @@ export class PeerIdService
 	/**
 	 * 	load peer id from local file
 	 *	@param	filename	{string} - filename where we store peerId
-	 * 	@returns {Promise<PeerId>}
+	 * 	@returns {Promise< PeerId | null >}
 	 */
 	static async loadPeerId( filename )
 	{
-		return new PeerIdStorageService().loadPeerId( filename );
+		return new Promise( async ( resolve, reject ) =>
+		{
+			try
+			{
+				try
+				{
+					const peerId = await new PeerIdStorageService().loadPeerId( filename );
+					return resolve( peerId );
+				}
+				catch ( err )
+				{
+				}
+
+				//	...
+				resolve( null );
+			}
+			catch ( err )
+			{
+				reject( err );
+			}
+		} );
 	}
 }
